@@ -74,7 +74,7 @@ export function AboutPage() {
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20" />
-      </div>
+      </div>  
       <div className="relative container mx-auto px-4 py-16">
         <header className="text-center mb-16">
           <motion.h1 
@@ -83,7 +83,7 @@ export function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, type: "spring" }}
           >
-            Welcome to DearDairy
+           Meet DearDiary, your space for life's moments
           </motion.h1>
           <motion.p 
             className="text-2xl text-gray-300 max-w-2xl mx-auto"
@@ -231,6 +231,7 @@ export function AboutPage() {
     </div>
   )
 }
+
 
 function FeatureCard({ icon, title, description, isActive, onClick }:any) {
   return (
