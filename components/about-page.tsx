@@ -1,253 +1,225 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Circle, ChevronDown, ChevronUp } from 'lucide-react'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Book, Heart, Lock, Sparkles, Users, Zap, BarChart, Calendar, Palette } from "lucide-react"
-import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function AboutPage() {
-  const [activeFeature, setActiveFeature] = useState<number | null>(null)
-  const [scrollY, setScrollY] = useState(0)
+  const [activeTab, setActiveTab] = useState("about")
+  const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  const toggleSection = (section: string) => {
+    setExpandedSection(expandedSection === section ? null : section)
+  }
 
-  const features = [
-    {
-      icon: <Book className="h-8 w-8 text-blue-300" />,
-      title: "Digital Journaling",
-      description: "Capture your thoughts and memories in a beautiful, organized digital format.",
-      details: "Our intuitive editor supports rich text formatting, image uploads, and voice notes, making it easy to express yourself in various ways."
-    },
-    {
-      icon: <Lock className="h-8 w-8 text-green-300" />,
-      title: "Private & Secure",
-      description: "Your entries are encrypted and only accessible to you. Your privacy is our top priority.",
-      details: "We use industry-standard encryption methods to ensure your data is safe. You can also enable two-factor authentication for an extra layer of security."
-    },
-    {
-      icon: <Sparkles className="h-8 w-8 text-purple-300" />,
-      title: "Mood Tracking",
-      description: "Visualize your emotional journey with our intuitive mood tracking feature.",
-      details: "Track your mood daily and view beautiful charts that help you understand your emotional patterns over time. Identify triggers and celebrate positive trends."
-    },
-    {
-      icon: <Users className="h-8 w-8 text-yellow-300" />,
-      title: "Community Support",
-      description: "Connect with like-minded individuals in our supportive journaling community.",
-      details: "Join themed journaling challenges, participate in writing prompts, and share insights (anonymously if you prefer) with a community that understands the power of self-reflection."
-    },
-    {
-      icon: <Heart className="h-8 w-8 text-red-300" />,
-      title: "Self-Care Tools",
-      description: "Access guided meditation, gratitude prompts, and other self-care resources.",
-      details: "Integrate mindfulness into your journaling practice with our curated selection of guided meditations, breathing exercises, and daily affirmations."
-    },
-    {
-      icon: <Zap className="h-8 w-8 text-orange-300" />,
-      title: "AI-Powered Insights",
-      description: "Gain deeper understanding of your entries with our AI analysis tools.",
-      details: "Our advanced AI can identify recurring themes, suggest areas for personal growth, and even offer writing prompts based on your journaling history."
-    },
-    {
-      icon: <BarChart className="h-8 w-8 text-indigo-300" />,
-      title: "Progress Tracking",
-      description: "Set personal goals and track your progress over time.",
-      details: "Whether it's developing a new habit or working towards a long-term goal, DearDairy helps you stay accountable and celebrate your milestones."
-    },
-    {
-      icon: <Calendar className="h-8 w-8 text-teal-300" />,
-      title: "Customizable Reminders",
-      description: "Never miss a journaling session with personalized reminders.",
-      details: "Set up daily, weekly, or custom reminders that fit your schedule. Receive gentle nudges to maintain your journaling habit."
-    },
-    
+  const boardSquares = [
+    { symbol: 'X', color: 'text-blue-500' },
+    { symbol: 'O', color: 'text-red-500' },
+    { symbol: 'X', color: 'text-blue-500' },
+    { symbol: 'O', color: 'text-red-500' },
+    { symbol: 'X', color: 'text-blue-500' },
+    { symbol: null, color: '' },
+    { symbol: 'O', color: 'text-red-500' },
+    { symbol: null, color: '' },
+    { symbol: 'X', color: 'text-blue-500' },
   ]
 
   return (
-    <div className="min-h-screen bg-black text-gray-100 overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920')] bg-cover bg-center opacity-5" />
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 to-blue-900/20" />
-      </div>  
-      <div className="relative container mx-auto px-4 py-16">
-        <header className="text-center mb-16">
-          <motion.h1 
-            className="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, type: "spring" }}
-          >
-           Meet DearDiary, your space for life's moments
-          </motion.h1>
-          <motion.p 
-            className="text-2xl text-gray-300 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
-          >
-            Embark on a journey of self-discovery and growth through the power of journaling.
-          </motion.p>
-        </header>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 p-8">
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto"
+      >
+        <h1 className="text-5xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-red-500">
+          Tic Tac Toe: Reimagined
+        </h1>
 
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="about">About</TabsTrigger>
+            <TabsTrigger value="howToPlay">How to Play</TabsTrigger>
+            <TabsTrigger value="strategies">Strategies</TabsTrigger>
+          </TabsList>
+          <TabsContent value="about">
+            <Card>
+              <CardHeader>
+                <CardTitle>About Tic Tac Toe</CardTitle>
+                <CardDescription>Discover the timeless game of strategy</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="mb-4"
+                >
+                  Tic Tac Toe, also known as Noughts and Crosses, is a classic game that has entertained people for generations. Its simplicity belies a depth of strategy that continues to engage players of all ages.
+                </motion.p>
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="grid grid-cols-3 gap-2 w-64 h-64 mx-auto mb-8"
+                >
+                  {boardSquares.map((square, index) => (
+                    <motion.div
+                      key={index}
+                      className="bg-white rounded-md shadow-md flex items-center justify-center"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <AnimatePresence>
+                        {square.symbol && (
+                          <motion.div
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            exit={{ scale: 0, rotate: 180 }}
+                            transition={{ duration: 0.3 }}
+                            className={`text-4xl font-bold ${square.color}`}
+                          >
+                            {square.symbol === 'X' ? <X size={32} /> : <Circle size={32} />}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button onClick={() => setActiveTab("howToPlay")}>Learn How to Play</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          <TabsContent value="howToPlay">
+            <Card>
+              <CardHeader>
+                <CardTitle>How to Play</CardTitle>
+                <CardDescription>Master the basics of Tic Tac Toe</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <motion.ol
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="list-decimal list-inside space-y-2 mb-4"
+                >
+                  <li>The game is played on a 3x3 grid.</li>
+                  <li>Two players take turns placing their symbol (X or O) in empty cells.</li>
+                  <li>The first player to get three of their symbols in a row (horizontally, vertically, or diagonally) wins.</li>
+                  <li>If all cells are filled and no player has won, the game is a draw.</li>
+                </motion.ol>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                >
+                  <Button onClick={() => toggleSection('videoTutorial')} className="w-full justify-between">
+                    Watch Video Tutorial
+                    {expandedSection === 'videoTutorial' ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                  </Button>
+                  <AnimatePresence>
+                    {expandedSection === 'videoTutorial' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="mt-4"
+                      >
+                        <div className="aspect-w-16 aspect-h-9">
+                          <iframe
+                            src="https://www.youtube.com/embed/5SdW0_wTX5c"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full rounded-lg"
+                          ></iframe>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="strategies">
+            <Card>
+              <CardHeader>
+                <CardTitle>Winning Strategies</CardTitle>
+                <CardDescription>Elevate your Tic Tac Toe game</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <motion.ul
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="space-y-2 mb-4"
+                >
+                  <li>
+                    <strong>Control the Center:</strong> The center square is the most strategic position on the board.
+                  </li>
+                  <li>
+                    <strong>Block Your Opponent:</strong> Always be on the lookout for your opponent's potential winning moves.
+                  </li>
+                  <li>
+                    <strong>Create a Fork:</strong> Set up a situation where you have two ways to win on your next move.
+                  </li>
+                  <li>
+                    <strong>Play the Corners:</strong> After the center, the corners are the next most advantageous positions.
+                  </li>
+                </motion.ul>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                >
+                  <Button onClick={() => toggleSection('advancedStrategies')} className="w-full justify-between">
+                    Advanced Strategies
+                    {expandedSection === 'advancedStrategies' ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                  </Button>
+                  <AnimatePresence>
+                    {expandedSection === 'advancedStrategies' && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="mt-4 p-4 bg-gray-100 rounded-lg"
+                      >
+                        <p className="mb-2">
+                          <strong>The Perfect Game:</strong> With perfect play from both sides, Tic Tac Toe always ends in a draw. Understanding this can help you force a draw even when you're not in a winning position.
+                        </p>
+                        <p>
+                          <strong>Psychological Tactics:</strong> Sometimes, the best strategy is to play unpredictably. Mix up your opening moves to keep your opponent guessing.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button onClick={() => window.open('https://www.wikihow.com/Win-at-Tic-Tac-Toe', '_blank')}>Learn More Strategies</Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        <motion.div
+          className="mt-8 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
         >
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <FeatureCard
-                icon={feature.icon}
-                title={feature.title}
-                description={feature.description}
-                isActive={activeFeature === index}
-                onClick={() => setActiveFeature(activeFeature === index ? null : index)}
-
-              />
-              <AnimatePresence>
-                {activeFeature === index && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-4 p-4 bg-gray-900/80 backdrop-blur-sm rounded-md"
-                  >
-                    <p className="text-sm text-gray-300">{feature.details}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+          <Button size="lg" className="bg-gradient-to-r from-blue-500 to-red-500 text-white">
+            Play Now
+          </Button>
         </motion.div>
-
-        <motion.section 
-          className="text-center mb-16 p-8 bg-gray-900/50 backdrop-blur-sm rounded-lg"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-300 to-blue-300">Our Mission</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            At DearDairy, we believe in the transformative power of self-reflection and personal growth. Our mission is to provide a safe, 
-            nurturing space for individuals to explore their thoughts, track their progress, and cultivate mindfulness in 
-            their daily lives. We're committed to helping you unlock your potential, one entry at a time.
-          </p>
-        </motion.section>
-
-        <motion.section 
-          className="mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <h2 className="text-3xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-red-300">Why Choose DearDairy?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700 hover:bg-gray-800/50 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-2xl bg-clip-text text-transparent bg-gradient-to-r from-pink-300 to-purple-300">For Personal Growth</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="list-disc pl-5 space-y-2 text-gray-300">
-                  <li>Gain clarity and insight into your thoughts and emotions</li>
-                  <li>Track your progress towards personal goals</li>
-                  <li>Develop a consistent self-reflection practice</li>
-                  <li>Improve your writing and communication skills</li>
-                </ul>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-900/50 backdrop-blur-sm border-gray-700 hover:bg-gray-800/50 transition-all duration-300">
-              <CardHeader>
-                <CardTitle className="text-2xl bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-green-300">For Mental Well-being</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="list-disc pl-5 space-y-2 text-gray-300">
-                  <li>Reduce stress and anxiety through expressive writing</li>
-                  <li>Cultivate gratitude and positive thinking</li>
-                  <li>Process and heal from past experiences</li>
-                  <li>Boost self-esteem and self-awareness</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </motion.section>
-
-        <motion.section 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-300 to-pink-300">Join Thousands of Satisfied Users</h2>
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {[
-              "Life-changing app!",
-              "Helped me understand myself better",
-              "Beautiful design, intuitive interface",
-              "The AI insights are amazing",
-              "Great for building a journaling habit"
-            ].map((quote, index) => (
-              <motion.span 
-                key={index} 
-                className="bg-gray-800/50 backdrop-blur-sm text-sm text-gray-300 px-3 py-1 rounded-full"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                "{quote}"
-              </motion.span>
-            ))}
-          </div>
-          <p className="text-xl text-gray-300 mb-8">
-            Start your journey of self-discovery and personal growth with DearDairy today.
-          </p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <Button asChild className="bg-gradient-to-r from-purple-400 to-blue-400 hover:from-purple-500 hover:to-blue-500 text-black font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-              <Link href="/signup">Begin Your Journey</Link>
-            </Button>
-          </motion.div>
-        </motion.section>
-
-        <footer className="text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} DearDairy. All rights reserved.</p>
-        </footer>
-      </div>
+      </motion.div>
     </div>
-  )
-}
-
-
-function FeatureCard({ icon, title, description, isActive, onClick }:any) {
-  return (
-    <Card 
-      className={`bg-gray-900/50 backdrop-blur-sm border-gray-800 hover:bg-gray-800/50 transition-all duration-300 cursor-pointer ${isActive ? 'ring-2 ring-blue-400' : ''}`}
-      onClick={onClick}
-    >
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-          {icon}
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-purple-300">{title}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="text-gray-300">{description}</CardDescription>
-      </CardContent>
-    </Card>
   )
 }
